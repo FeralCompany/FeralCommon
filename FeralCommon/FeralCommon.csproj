@@ -50,25 +50,15 @@
             <BepInExPluginVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</BepInExPluginVersion>
         </PropertyGroup>
     </Target>
-    <Target Name="PackThunderstore" Condition="$(PackThunderstore) == 'true' and $(TargetFramework) == 'netstandard2.1'">
+    <Target Name="PackThunderstore" AfterTargets="PostBuildEvent" Condition="$(PackThunderstore) == 'true' and $(TargetFramework) == 'netstandard2.1'">
         <PropertyGroup>
             <PlainVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</PlainVersion>
         </PropertyGroup>
+        <Message Importance="high" Text="Creating a Thunderstore package @ $(PlainVersion)" />
         <Exec Command="tcli build --config-path $(SolutionDir)assets/thunderstore.toml --package-version $(PlainVersion)" />
         <ItemGroup>
             <FilesToRename Include="$(SolutionDir)dist/*-$(PlainVersion).zip" />
         </ItemGroup>
         <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename -&gt; Replace($(PlainVersion), $(MinVerVersion)))" />
-    </Target>
-    <Target Name="DebugVariables" BeforeTargets="AddGeneratedFile" DependsOnTargets="MinVer">
-        <Message Importance="high" Text="CI: $(CI)" />
-        <Message Importance="high" Text="PackThunderstore: $(PackThunderstore)" />
-        <Message Importance="high" Text="TargetFramework: $(TargetFramework)" />
-        <Message Importance="high" Text="MinVerVersion: $(MinVerVersion)" />
-        <Message Importance="high" Text="MinVerMajor: $(MinVerMajor)" />
-        <Message Importance="high" Text="MinVerMinor: $(MinVerMinor)" />
-        <Message Importance="high" Text="MinVerPatch: $(MinVerPatch)" />
-        <Message Importance="high" Text="SolutionDir: $(SolutionDir)" />
-        <Message Importance="high" Text="PlainVersion: $(PlainVersion)" />
     </Target>
 </Project>
