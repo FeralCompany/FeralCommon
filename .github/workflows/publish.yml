@@ -4,6 +4,9 @@ on:
   release:
     types: [prereleased, released]
 
+env:
+  CI: true
+
 jobs:
   build:
     name: Build
