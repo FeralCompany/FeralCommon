@@ -37,9 +37,9 @@ FeralCommon.dll
 !FeralCommon.sln
 
 ### FeralCommon Project
-!src/
-src/[Bb]in/
-src/[Oo]bj/
+!FeralCommon/
+FeralCommon/[Bb]in/
+FeralCommon/[Oo]bj/
 
 # Include Explicit exceptions/ignores
 **.user
