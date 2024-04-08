@@ -7,7 +7,7 @@ repository = "https://thunderstore.io"
 [package]
 namespace = "FeralCompany"
 name = "FeralCommon"
-description = ""
+description = "A collection of common utilities and classes that are used across various FeralCompany projects"
 websiteUrl = "https://github.com/FeralCompany/FeralCommon"
 containsNsfwContent = false
 
