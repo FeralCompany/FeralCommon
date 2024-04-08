@@ -21,6 +21,9 @@
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <OutputPath>../bin</OutputPath>
     </PropertyGroup>
+    <PropertyGroup Condition="$(CI) == 'true'">
+        <PackThunderstore>true</PackThunderstore>
+    </PropertyGroup>
     <ItemGroup>
         <None Include="../README.md;../CHANGELOG.md;../LICENSE" Pack="true" PackagePath="/" />
         <Content Include="FeralCommon.csproj.user" />
@@ -43,13 +46,11 @@
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'" />
     </ItemGroup>
     <Target Name="SetPluginVersion" BeforeTargets="AddGeneratedFile" DependsOnTargets="MinVer">
-        <Message Importance="high" Text="MinVer version is $(MinVerVersion)" />
         <PropertyGroup>
             <BepInExPluginVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</BepInExPluginVersion>
         </PropertyGroup>
     </Target>
-    <Target Name="PackThunderstore" Condition="$(PACK_THUNDERSTORE) == 'true' and $(TargetFramework) == 'netstandard2.1'">
-        <Message Importance="high" Text="MinVer version is $(MinVerVersion)" />
+    <Target Name="PackThunderstore" Condition="$(PackThunderstore) == 'true' and $(TargetFramework) == 'netstandard2.1'">
         <PropertyGroup>
             <PlainVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</PlainVersion>
         </PropertyGroup>

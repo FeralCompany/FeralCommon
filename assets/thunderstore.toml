@@ -17,8 +17,7 @@ BepInEx-BepInExPack = "5.4.2100"
 [build]
 icon = "icon.png"
 readme = "../README.md"
-changelog = "../CHANGELOG.md"
-license = "../../LICENSE"
+outdir = "../dist"
 
 [[build.copy]]
 source = "../bin/netstandard2.1/FeralCommon.dll"
@@ -27,10 +26,6 @@ target = "BepInEx/plugins/FeralCommon.dll"
 [[build.copy]]
 source = "../CHANGELOG.md"
 target = "CHANGELOG.md"
-
-[[build.copy]]
-source = "../README.md"
-target = "README.md"
 
 [[build.copy]]
 source = "../LICENSE"
