@@ -11,6 +11,7 @@ public abstract class Config<TDerived, TType> : IConfig where TDerived : Config<
     private string Key { get; set; } = string.Empty;
     private string Description { get; set; } = "No description provided";
     private TType? DefaultValue { get; set; }
+    private Action<TType> ValueChangeListener { get; set; } = _ => { };
 
     internal bool RequiresRestart { get; private set; }
 
@@ -26,6 +27,7 @@ public abstract class Config<TDerived, TType> : IConfig where TDerived : Config<
         var definition = new ConfigDefinition(Section, Key);
         var description = new ConfigDescription(Description, CreateAcceptableValue());
         var entry = configFile.Bind(definition, DefaultValue, description);
+        entry.SettingChanged += (_, _) => ValueChangeListener.Invoke(entry.Value);
         ConfigEntry = entry;
     }
 
@@ -54,8 +56,24 @@ public abstract class Config<TDerived, TType> : IConfig where TDerived : Config<
         return (TDerived)this;
     }
 
+    public TDerived WhenUpdate(Action<TType> valueChangeListener)
+    {
+        ValueChangeListener += valueChangeListener;
+        return (TDerived)this;
+    }
+
     protected virtual AcceptableValueBase? CreateAcceptableValue()
     {
         return null;
+    }
+
+    public static implicit operator TType(Config<TDerived, TType> config)
+    {
+        return config.ConfigEntry!.Value;
+    }
+
+    public static implicit operator ConfigEntry<TType>(Config<TDerived, TType> config)
+    {
+        return config.ConfigEntry!;
     }
 }
