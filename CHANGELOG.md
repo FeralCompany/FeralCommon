@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning][2].
 
 N/A
 
+## Version [v0.0.4] (2024-04-12)
+
+### Added
+
+- Added `FeralCommon.Config.ColorConfig`
+- Added implicit operators for `ConfigEntry` and `ColorEntry.Value`
+
+## Version [v0.0.3] (2024-04-12)
+
+### Fixes
+
+- Fixed build and packaging issues.
+
 ## Version [v0.0.2] (2024-04-11)
 
 ### Added
