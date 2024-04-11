@@ -27,7 +27,6 @@
     </PropertyGroup>
     <ItemGroup>
         <None Include="../README.md;../CHANGELOG.md;../LICENSE" Pack="true" PackagePath="/"/>
-        <Content Include="FeralCommon.csproj.user"/>
     </ItemGroup>
     <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
         <ItemGroup>

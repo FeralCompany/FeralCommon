@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning][2].
 
 ## [Unreleased]
 
+N/A
+
+## Version [v0.0.2] (2024-04-11)
+
 ### Added
 
 - Soft [LethalConfig][3] integration
+
+## Version [v0.0.1] (2024-04-08)
+
+### Added
+
+- Initial release
 
 [1]: <https://keepachangelog.com/en/1.1.0/> "Keep a Changelog, 1.1.0"
 
