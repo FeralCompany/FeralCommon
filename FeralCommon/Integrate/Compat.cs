@@ -12,7 +12,7 @@ public static class Compat
     public static bool LethalConfig => IsPluginAvailable(LethalConfigKey);
     public static bool InputUtils => IsPluginAvailable(InputUtilsKey);
 
-    private static bool IsPluginAvailable(string key)
+    public static bool IsPluginAvailable(string key)
     {
         return Chainloader.PluginInfos.ContainsKey(key);
     }

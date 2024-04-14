@@ -8,30 +8,38 @@ namespace FeralCommon.Config;
 
 internal static class ConfigLoader
 {
+    private const BindingFlags AttributeFilter = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
     private static readonly Type ConfigType = typeof(IConfig);
 
     public static int ConfigureAll(ConfigFile configFile, Type from)
     {
-        var discovered = new List<IConfig>();
-        GetConfigFields(from, discovered);
-
-        foreach (var config in discovered)
+        GetConfigFields(from, out var configs);
+        foreach (var config in configs)
         {
             config.InitConfigEntry(configFile);
             if (Compat.LethalConfig) Integrate.LethalConfig.Register(config);
         }
 
-        return discovered.Count;
+        return configs.Count;
     }
 
-    private static void GetConfigFields(Type from, ICollection<IConfig> discovered)
+    private static void GetConfigFields(Type from, out List<IConfig> configs)
     {
-        var fields = from.GetFields(BindingFlags.Public | BindingFlags.Static);
-        foreach (var field in fields)
-            if (ConfigType.IsAssignableFrom(field.FieldType) && field.GetValue(null) is IConfig config)
-                discovered.Add(config);
+        configs = [];
 
-        var nested = from.GetNestedTypes(BindingFlags.Public | BindingFlags.Static);
-        foreach (var type in nested) GetConfigFields(type, discovered);
+        foreach (var field in from.GetFields(AttributeFilter))
+        {
+            if (ConfigType.IsAssignableFrom(field.FieldType) && field.GetValue(null) is IConfig config)
+            {
+                configs.Add(config);
+            }
+        }
+
+        foreach (var type in from.GetNestedTypes(AttributeFilter))
+        {
+            GetConfigFields(type, out var moreConfigs);
+            configs.AddRange(moreConfigs);
+        }
     }
 }

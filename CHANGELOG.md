@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning][2].
 
 ## [Unreleased]
 
-N/A
+### Added
+
+- Added BoolConfig
+- Added support for `ButtonPress` and `ButtonToggle`
+
+### Fixed
+
+- Added missing converter for ColorConfig
+- Fixed `Start` and `Update` methods not being called
 
 ## Version [v0.0.4] (2024-04-12)
 
