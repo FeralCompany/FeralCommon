@@ -8,9 +8,15 @@ and this project adheres to [Semantic Versioning][2].
 ## [Unreleased]
 
 ### Added
+- N/A
+
+## Version [v0.0.5] (2024-04-14)
+
+### Added
 
 - Added BoolConfig
 - Added support for `ButtonPress` and `ButtonToggle`
+- Soft [InputUtils][4] integration
 
 ### Fixed
 
@@ -47,3 +53,5 @@ and this project adheres to [Semantic Versioning][2].
 [2]: <https://semver.org/spec/v2.0.0.html> "Semantic Versioning, 2.0.0"
 
 [3]: <https://thunderstore.io/c/lethal-company/p/AinaVT/LethalConfig/> "LethalConfig by AinaVT"
+
+[4]: <https://thunderstore.io/c/lethal-company/p/Rune580/LethalCompany_InputUtils/> "InputUtils by Rune580"
