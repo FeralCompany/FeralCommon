@@ -1,4 +1,4 @@
-name: Release tagged build
+name: Create Release
 
 on:
   push:
@@ -21,26 +21,31 @@ jobs:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Release Current Tag
+        shell: bash
+        continue-on-error: false
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
+          LATEST_VERSION=$(grep -oP '(?<=Version \[).*(?=\])' CHANGELOG.md | head -n 1)
+          START_LINE=$(grep -n "Version \[$LATEST_VERSION\]" CHANGELOG.md | cut -d ":" -f 1)
+          NEXT_RELEASE_LINE=$(grep -n "Version \[v" CHANGELOG.md | grep -A 1 "$LATEST_VERSION" | tail -n 1 | cut -d ":" -f 1)
+
           export "CHANGELOG_FILE=$(mktemp --suffix=.md)"
           echo "CHANGELOG_FILE=${CHANGELOG_FILE}" >> $GITHUB_ENV
+
           gh api --method POST -H "Accept: application/vnd.github+json" \
             "/repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
             -f tag_name="${RELEASE_VERSION}" \
             --jq ".body" > "${CHANGELOG_FILE}"
-          LATEST_VERSION=$(grep -oP '(?<=Version \[).*(?=\])' CHANGELOG.md | head -n 1)
-          START_LINE=$(grep -n "Version \[$LATEST_VERSION\]" CHANGELOG.md | cut -d ":" -f 1)
-          NEXT_RELEASE_LINE=$(grep -n "Version \[v" CHANGELOG.md | grep -A 1 "$LATEST_VERSION" | tail -n 1 | cut -d ":" -f 1)
+
           if [ -z "$NEXT_RELEASE_LINE" ]; then
             end_line=$(wc -l < CHANGELOG.md)
           else
               end_line=$((NEXT_RELEASE_LINE - 1))
           fi
+
           echo "" >> "${CHANGELOG_FILE}"
           sed -n "${START_LINE},${end_line}p" CHANGELOG.md >> "${CHANGELOG_FILE}"
           cat "${CHANGELOG_FILE}"
-          gh release create "${RELEASE_VERSION}" -F "${CHANGELOG_FILE}"
-        shell: bash
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+          gh release create "${RELEASE_VERSION}" -t "${RELEASE_VERSION}" -F "${CHANGELOG_FILE}"

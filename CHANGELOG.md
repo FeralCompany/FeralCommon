@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-N/A
+- N/A
+
+## Version [v0.0.7] (2024-04-15)
+
+### Changed
+
+- Fixed various aspects of build cycle.
+- No code updates.
+- Just testing build cycle changes.
 
 ## Version [v0.0.6] (2024-04-15)
 
@@ -21,8 +29,7 @@ N/A
 
 ### Changed
 
-- [InputUtils](https://thunderstore.io/c/lethal-company/p/Rune580/LethalCompany_InputUtils 'InputUtils by Rune580') and
-  [LethalConfig](https://thunderstore.io/c/lethal-company/p/AinaVT/LethalConfig 'LethalConfig by AinaVT') are now hard dependencies.
+- [InputUtils](https://thunderstore.io/c/lethal-company/p/Rune580/LethalCompany_InputUtils 'InputUtils by Rune580') and [LethalConfig](https://thunderstore.io/c/lethal-company/p/AinaVT/LethalConfig 'LethalConfig by AinaVT') are now hard dependencies.
     - I can no longer be arsed to deal with the nightmare that is soft dependencies. With how efficient Thunderstore and r2modman are, there's no
       downside to having them as hard dependencies.
     - With this change, I think that usage is even better than before, and significantly less confusing.
