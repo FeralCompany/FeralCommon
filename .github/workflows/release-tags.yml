@@ -14,13 +14,13 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Delete old release if it already exists
+      - name: Delete Old Release
         run: gh release delete --yes "${RELEASE_VERSION}"
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
-      - name: Release under current tag
+      - name: Release Current Tag
         run: |
           export "CHANGELOG_FILE=$(mktemp --suffix=.md)"
           echo "CHANGELOG_FILE=${CHANGELOG_FILE}" >> $GITHUB_ENV
@@ -28,6 +28,16 @@ jobs:
             "/repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
             -f tag_name="${RELEASE_VERSION}" \
             --jq ".body" > "${CHANGELOG_FILE}"
+          LATEST_VERSION=$(grep -oP '(?<=Version \[).*(?=\])' CHANGELOG.md | head -n 1)
+          START_LINE=$(grep -n "Version \[$LATEST_VERSION\]" CHANGELOG.md | cut -d ":" -f 1)
+          NEXT_RELEASE_LINE=$(grep -n "Version \[v" CHANGELOG.md | grep -A 1 "$LATEST_VERSION" | tail -n 1 | cut -d ":" -f 1)
+          if [ -z "$NEXT_RELEASE_LINE" ]; then
+            end_line=$(wc -l < CHANGELOG.md)
+          else
+              end_line=$((NEXT_RELEASE_LINE - 1))
+          fi
+          echo "" >> "${CHANGELOG_FILE}"
+          sed -n "${START_LINE},${end_line}p" CHANGELOG.md >> "${CHANGELOG_FILE}"
           cat "${CHANGELOG_FILE}"
           gh release create "${RELEASE_VERSION}" -F "${CHANGELOG_FILE}"
         shell: bash
