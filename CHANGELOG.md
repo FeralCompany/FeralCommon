@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning][2].
 
 ## [Unreleased]
 
+N/A
+
+## Version [v0.0.6] (2024-04-15)
+
 ### Added
 
 - Abstract Harmony initializer with lazy access to Harmony instance
