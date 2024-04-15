@@ -1,20 +1,33 @@
-using UnityEngine.InputSystem;
+using System;
+using JetBrains.Annotations;
 
 namespace FeralCommon.Input;
 
-public abstract class ButtonToggle : ButtonPress
+[UsedImplicitly]
+public class ButtonToggle(string id, string name, string path) : ButtonBindingBase<ButtonToggle>(id, name, path)
 {
-    public abstract bool IsActive();
-    public abstract void ToggleActive();
-    public abstract void SetActive(bool active);
+    [UsedImplicitly] public bool Active { get; private set; }
 
-    public static implicit operator bool(ButtonToggle buttonToggle)
+    private Action<bool>? WhenToggled { get; set; }
+
+    [UsedImplicitly]
+    public ButtonToggle OnToggle(Action<bool> action)
     {
-        return buttonToggle.IsActive();
+        WhenToggled += action;
+        return this;
     }
 
-    public static ButtonToggle Create(Key key, string actionId, string bindingName, bool active = default)
+    protected override void Init()
     {
-        return new ButtonToggleWrapper(key, actionId, bindingName, active);
+        Input.performed += _ =>
+        {
+            Active = !Active;
+            WhenToggled?.Invoke(Active);
+        };
+    }
+
+    public static implicit operator bool(ButtonToggle toggle)
+    {
+        return toggle.Active;
     }
 }

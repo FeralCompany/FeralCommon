@@ -1,65 +1,94 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
+using System.Linq;
 using BepInEx.Configuration;
+using JetBrains.Annotations;
+using LethalConfig.ConfigItems.Options;
 
 namespace FeralCommon.Config;
 
-[SuppressMessage("ReSharper", "UnusedMember.Global")]
-public abstract class Config<TDerived, TType> : IConfig where TDerived : Config<TDerived, TType> where TType : IComparable
+public abstract class Config<TDerived, TType>(string section, string key)
+    : ConfigBase where TDerived : Config<TDerived, TType> where TType : IConvertible
 {
-    private string Section { get; set; } = string.Empty;
-    private string Key { get; set; } = string.Empty;
-    private string Description { get; set; } = "No description provided";
+    private string Section { get; } = section;
+    private string Key { get; } = key;
+
+    private string Description { get; set; } = "No description provided.";
     private TType? DefaultValue { get; set; }
-    private Action<TType> ValueChangeListener { get; set; } = _ => { };
+    private bool RequiresRestart { get; set; }
+    private List<Action<TType>> ValueChangedActions { get; } = [];
+    private List<Func<CanModifyResult>> CanModifyChecks { get; } = [];
 
-    internal bool RequiresRestart { get; private set; }
+    private ConfigEntry<TType>? Entry { get; set; }
 
-    internal ConfigEntry<TType>? ConfigEntry { get; private set; }
+    protected ConfigEntry<TType> ValidatedEntry =>
+        Entry ?? throw new InvalidOperationException("Config entry must be initialized before getting value.");
 
-    public void InitConfigEntry(ConfigFile configFile)
-    {
-        if (Section == string.Empty || Key == string.Empty)
-            throw new InvalidOperationException("Section and Key must be set before initializing config entry.");
+    [UsedImplicitly] public TType Value => ValidatedEntry.Value;
 
-        if (DefaultValue == null) throw new InvalidOperationException("Default value must be set before initializing config entry.");
-
-        var definition = new ConfigDefinition(Section, Key);
-        var description = new ConfigDescription(Description, CreateAcceptableValue());
-        var entry = configFile.Bind(definition, DefaultValue, description);
-        entry.SettingChanged += (_, _) => ValueChangeListener.Invoke(entry.Value);
-        ConfigEntry = entry;
-    }
-
-    public TDerived WithDefinition(string section, string key)
-    {
-        Section = section;
-        Key = key;
-        return (TDerived)this;
-    }
-
+    [UsedImplicitly]
     public TDerived WithDescription(string description)
     {
         Description = description;
         return (TDerived)this;
     }
 
+    [UsedImplicitly]
     public TDerived WithDefaultValue(TType defaultValue)
     {
         DefaultValue = defaultValue;
         return (TDerived)this;
     }
 
+    [UsedImplicitly]
     public TDerived SetRequiresRestart()
     {
         RequiresRestart = true;
         return (TDerived)this;
     }
 
-    public TDerived WhenUpdate(Action<TType> valueChangeListener)
+    [UsedImplicitly]
+    public TDerived OnValueChanged(Action<TType> action)
     {
-        ValueChangeListener += valueChangeListener;
+        ValueChangedActions.Add(action);
         return (TDerived)this;
+    }
+
+    [UsedImplicitly]
+    public TDerived CanModify(Func<CanModifyResult> check)
+    {
+        CanModifyChecks.Add(check);
+        return (TDerived)this;
+    }
+
+    private CanModifyResult CanModifyValue()
+    {
+        if (CanModifyChecks.Count == 0) return CanModifyResult.True();
+
+        var reasons = CanModifyChecks
+            .Select(check => check.Invoke())
+            .Where(result => !result)
+            .Select(result => result.Reason)
+            .ToList();
+
+        return reasons.Any() ? CanModifyResult.False(string.Join(Environment.NewLine, reasons)) : CanModifyResult.True();
+    }
+
+    internal override void InitConfigEntry(ConfigFile configFile)
+    {
+        if (DefaultValue == null) throw new InvalidOperationException("Default value must be set before initializing config entry.");
+
+        var definition = new ConfigDefinition(Section, Key);
+        var description = new ConfigDescription(Description, CreateAcceptableValue());
+
+        var entry = configFile.Bind(definition, DefaultValue, description);
+        entry.SettingChanged += (_, _) =>
+        {
+            var value = entry.Value;
+            ValueChangedActions.ForEach(e => e.Invoke(value));
+        };
+
+        Entry = entry;
     }
 
     protected virtual AcceptableValueBase? CreateAcceptableValue()
@@ -67,13 +96,18 @@ public abstract class Config<TDerived, TType> : IConfig where TDerived : Config<
         return null;
     }
 
-    public static implicit operator TType(Config<TDerived, TType> config)
+    protected TBaseOptions FillBaseOptions<TBaseOptions>(TBaseOptions options) where TBaseOptions : BaseOptions
     {
-        return config.ConfigEntry!.Value;
+        options.Section = Section;
+        options.Name = Key;
+        options.Description = Description;
+        options.RequiresRestart = RequiresRestart;
+        options.CanModifyCallback = CanModifyValue;
+        return options;
     }
 
-    public static implicit operator ConfigEntry<TType>(Config<TDerived, TType> config)
+    public static implicit operator TType(Config<TDerived, TType> config)
     {
-        return config.ConfigEntry!;
+        return config.Value;
     }
 }

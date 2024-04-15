@@ -1,24 +1,32 @@
-using System.Diagnostics.CodeAnalysis;
-using BepInEx.Configuration;
+using JetBrains.Annotations;
+using LethalConfig.ConfigItems;
+using LethalConfig.ConfigItems.Options;
 
 namespace FeralCommon.Config;
 
-[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-[SuppressMessage("ReSharper", "UnusedMember.Global")]
-public class IntConfig : Config<IntConfig, int>
+[UsedImplicitly]
+public class IntConfig(string section, string key) : RangeConfig<IntConfig, int>(section, key)
 {
-    public int Min { get; private set; }
-    public int Max { get; private set; }
+    private bool Slider { get; set; } = true;
 
-    public IntConfig WithRange(int min, int max)
+    [UsedImplicitly]
+    public IntConfig NoSlider()
     {
-        Min = min;
-        Max = max;
+        Slider = false;
         return this;
     }
 
-    protected override AcceptableValueBase CreateAcceptableValue()
+    protected internal override BaseConfigItem CreateConfigItem()
     {
-        return new AcceptableValueRange<int>(Min, Max);
+        if (Slider)
+        {
+            var options = new IntSliderOptions { Min = Min, Max = Max };
+            return new IntSliderConfigItem(ValidatedEntry, FillBaseOptions(options));
+        }
+        else
+        {
+            var options = new IntInputFieldOptions { Min = Min, Max = Max };
+            return new IntInputFieldConfigItem(ValidatedEntry, FillBaseOptions(options));
+        }
     }
 }

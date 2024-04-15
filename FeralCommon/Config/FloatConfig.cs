@@ -1,31 +1,40 @@
-using System.Diagnostics.CodeAnalysis;
-using BepInEx.Configuration;
+using JetBrains.Annotations;
+using LethalConfig.ConfigItems;
+using LethalConfig.ConfigItems.Options;
 
 namespace FeralCommon.Config;
 
-[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-[SuppressMessage("ReSharper", "UnusedMember.Global")]
-public class FloatConfig : Config<FloatConfig, float>
+[UsedImplicitly]
+public class FloatConfig(string section, string key) : RangeConfig<FloatConfig, float>(section, key)
 {
-    public float Min { get; private set; }
-    public float Max { get; private set; }
-    public float Step { get; private set; } = 0.1F;
+    private bool Slider { get; set; } = true;
+    private float Step { get; set; } = 0.1f;
 
-    public FloatConfig WithRange(float min, float max)
+    [UsedImplicitly]
+    public FloatConfig NoSlider()
     {
-        Min = min;
-        Max = max;
+        Slider = false;
         return this;
     }
 
+    [UsedImplicitly]
     public FloatConfig WithStep(float step)
     {
         Step = step;
         return this;
     }
 
-    protected override AcceptableValueBase CreateAcceptableValue()
+    protected internal override BaseConfigItem CreateConfigItem()
     {
-        return new AcceptableValueRange<float>(Min, Max);
+        if (Slider)
+        {
+            var options = new FloatStepSliderOptions { Min = Min, Max = Max, Step = Step };
+            return new FloatSliderConfigItem(ValidatedEntry, FillBaseOptions(options));
+        }
+        else
+        {
+            var options = new FloatInputFieldOptions { Min = Min, Max = Max };
+            return new FloatInputFieldConfigItem(ValidatedEntry, FillBaseOptions(options));
+        }
     }
 }

@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using BepInEx.Logging;
+using JetBrains.Annotations;
 
 namespace FeralCommon.Utils;
 
+[UsedImplicitly]
 public static class Log
 {
     private const string LogTemplate = "{0}#{1}(L{2}): {3}";
     private static readonly Dictionary<string, ManualLogSource> Loggers = new();
 
+    [UsedImplicitly]
     public static void Debug(string message,
         [CallerFilePath] string filePath = "",
         [CallerMemberName] string memberName = "",
@@ -20,6 +23,7 @@ public static class Log
         LogInternal(logger, LogLevel.Debug, message, filePath, memberName, lineNumber);
     }
 
+    [UsedImplicitly]
     public static void Info(string message,
         [CallerFilePath] string filePath = "",
         [CallerMemberName] string memberName = "",
@@ -29,6 +33,7 @@ public static class Log
         LogInternal(logger, LogLevel.Info, message, filePath, memberName, lineNumber);
     }
 
+    [UsedImplicitly]
     public static void Warning(string message,
         [CallerFilePath] string filePath = "",
         [CallerMemberName] string memberName = "",
@@ -38,6 +43,7 @@ public static class Log
         LogInternal(logger, LogLevel.Warning, message, filePath, memberName, lineNumber);
     }
 
+    [UsedImplicitly]
     public static void Error(string message,
         [CallerFilePath] string filePath = "",
         [CallerMemberName] string memberName = "",
@@ -47,6 +53,7 @@ public static class Log
         LogInternal(logger, LogLevel.Error, message, filePath, memberName, lineNumber);
     }
 
+    [UsedImplicitly]
     public static void Fatal(string message,
         [CallerFilePath] string filePath = "",
         [CallerMemberName] string memberName = "",

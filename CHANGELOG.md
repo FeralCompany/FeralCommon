@@ -8,7 +8,19 @@ and this project adheres to [Semantic Versioning][2].
 ## [Unreleased]
 
 ### Added
-- N/A
+
+- Abstract Harmony initializer with lazy access to Harmony instance
+- Various utilities
+- Tightened scopes where possible
+- Better README.md
+    - Added usage examples and a link to the contribution guidelines
+
+### Changed
+
+- [InputUtils][4] and [LethalConfig][3] are now hard dependencies.
+    - I can no longer be arsed to deal with the nightmare that is soft dependencies. With how efficient Thunderstore and r2modman are, there's no
+      downside to having them as hard dependencies.
+    - With this change, I think that usage is even better than before, and significantly less confusing.
 
 ## Version [v0.0.5] (2024-04-14)
 

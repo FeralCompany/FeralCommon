@@ -1,20 +1,29 @@
-using System.Diagnostics.CodeAnalysis;
-using UnityEngine.InputSystem;
+using System;
+using JetBrains.Annotations;
 
 namespace FeralCommon.Input;
 
-public abstract class ButtonPress
+[UsedImplicitly]
+public class ButtonPress(string id, string name, string path) : ButtonBindingBase<ButtonPress>(id, name, path)
 {
-    [SuppressMessage("ReSharper", "UnusedMemberInSuper.Global")]
-    public abstract bool PressedThisFrame();
+    [UsedImplicitly] public bool PressedThisFrame => Input.triggered;
 
-    public static implicit operator bool(ButtonPress buttonPress)
+    private Action? WhenPressed { get; set; }
+
+    [UsedImplicitly]
+    public ButtonPress OnPressed(Action whenPressed)
     {
-        return buttonPress.PressedThisFrame();
+        WhenPressed += whenPressed;
+        return this;
     }
 
-    public static ButtonPress Create(Key key, string actionId, string bindingName)
+    protected override void Init()
     {
-        return new ButtonPressWrapper(key, actionId, bindingName);
+        Input.performed += _ => WhenPressed?.Invoke();
+    }
+
+    public static implicit operator bool(ButtonPress press)
+    {
+        return press.PressedThisFrame;
     }
 }
