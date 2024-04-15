@@ -71,14 +71,15 @@ public void Update() {
 
 #### Registration
 
+> [!IMPORTANT]
+> You must call `RegisterButtons` in the `Load` method of your plugin. The registration method is closed after the `Load` method is called.
+
 ```csharp
 public void Load() {
     RegisterButtons(typeof(MyButtons)); // Will only register static fields.
     RegisterButtons(new MyButtons()); // Will only register instance fields.
 }
 ```
-
-Note: RegisterButtons is a protected method in the `FeralPlugin` class.
 
 ### Configs
 
