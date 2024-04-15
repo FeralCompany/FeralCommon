@@ -2,8 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog][1],
-and this project adheres to [Semantic Versioning][2].
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/ 'Keep a Changelog, 1.1.0'),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html 'Semantic Versioning, 2.0.0').
 
 ## [Unreleased]
 
@@ -21,7 +21,8 @@ N/A
 
 ### Changed
 
-- [InputUtils][4] and [LethalConfig][3] are now hard dependencies.
+- [InputUtils](https://thunderstore.io/c/lethal-company/p/Rune580/LethalCompany_InputUtils 'InputUtils by Rune580') and
+  [LethalConfig](https://thunderstore.io/c/lethal-company/p/AinaVT/LethalConfig 'LethalConfig by AinaVT') are now hard dependencies.
     - I can no longer be arsed to deal with the nightmare that is soft dependencies. With how efficient Thunderstore and r2modman are, there's no
       downside to having them as hard dependencies.
     - With this change, I think that usage is even better than before, and significantly less confusing.
@@ -32,7 +33,7 @@ N/A
 
 - Added BoolConfig
 - Added support for `ButtonPress` and `ButtonToggle`
-- Soft [InputUtils][4] integration
+- Soft [InputUtils](https://thunderstore.io/c/lethal-company/p/Rune580/LethalCompany_InputUtils 'InputUtils by Rune580') integration
 
 ### Fixed
 
@@ -56,18 +57,10 @@ N/A
 
 ### Added
 
-- Soft [LethalConfig][3] integration
+- Soft [LethalConfig](https://thunderstore.io/c/lethal-company/p/AinaVT/LethalConfig 'LethalConfig by AinaVT') integration
 
 ## Version [v0.0.1] (2024-04-08)
 
 ### Added
 
 - Initial release
-
-[1]: <https://keepachangelog.com/en/1.1.0/> "Keep a Changelog, 1.1.0"
-
-[2]: <https://semver.org/spec/v2.0.0.html> "Semantic Versioning, 2.0.0"
-
-[3]: <https://thunderstore.io/c/lethal-company/p/AinaVT/LethalConfig/> "LethalConfig by AinaVT"
-
-[4]: <https://thunderstore.io/c/lethal-company/p/Rune580/LethalCompany_InputUtils/> "InputUtils by Rune580"
