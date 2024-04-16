@@ -104,7 +104,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} thunderstore-build/*.zip
+          gh release upload ${{ github.ref_name }} thunderstore-build/*.zip
   deploy-thunderstore:
     name: Deploy Thunderstore Release
     needs: build-release-artifact
