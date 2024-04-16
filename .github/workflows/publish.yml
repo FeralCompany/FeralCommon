@@ -43,6 +43,9 @@ jobs:
     name: Upload Release Artifacts
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     steps:
       - name: Fetch Sources
         uses: actions/checkout@v4
@@ -52,8 +55,9 @@ jobs:
 
       - name: Upload artifacts to Release
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        run: gh release upload ${{ github.event.release.tag_name }} thunderstore-build/*.zip
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} thunderstore-build/*.zip
 
   deploy-thunderstore:
     name: Deploy to Thunderstore

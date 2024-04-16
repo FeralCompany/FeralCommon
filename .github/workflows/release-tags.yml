@@ -7,8 +7,10 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     env:
-      USE_STUBBED_LIBS: 1
       RELEASE_VERSION: ${{ github.ref_name }}
     steps:
       - name: Checkout Repo
@@ -18,13 +20,13 @@ jobs:
         run: gh release delete --yes "${RELEASE_VERSION}"
         continue-on-error: true
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release Current Tag
         shell: bash
         continue-on-error: false
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           LATEST_VERSION=$(grep -oP '(?<=Version \[).*(?=\])' CHANGELOG.md | head -n 1)
           START_LINE=$(grep -n "Version \[$LATEST_VERSION\]" CHANGELOG.md | cut -d ":" -f 1)
