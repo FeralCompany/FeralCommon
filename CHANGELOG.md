@@ -9,23 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet.
 
-## Version [v0.0.11] (2024-04-15)
-
-- More Build System Testing
-
-## Version [v0.0.10] (2024-04-15)
-
-- More Build System Testing
-
-## Version [v0.0.9] (2024-04-15)
-
-- Last time (for real)
-
-## Version [v0.0.8] (2024-04-15)
-
-- History will forgive me these sins.
-
-## Version [v0.0.7] (2024-04-15)
+## Version [v0.0.7 -> v0.0.11] (2024-04-15)
 
 ### Changed
 
