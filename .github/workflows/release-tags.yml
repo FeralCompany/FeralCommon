@@ -51,3 +51,7 @@ jobs:
           cat "${CHANGELOG_FILE}"
 
           gh release create "${RELEASE_VERSION}" -t "${RELEASE_VERSION}" -F "${CHANGELOG_FILE}"
+      - name: Dispatch Release Created Event
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          event-type: my-event

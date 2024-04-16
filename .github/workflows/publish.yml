@@ -1,6 +1,11 @@
 name: Publish Release
 
 on:
+  workflow_run:
+    workflows:
+      - "Create Release"
+    types:
+      - completed
   release:
     types: [released]
 
