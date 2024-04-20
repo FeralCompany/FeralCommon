@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet.
 
+## Version [v0.1.0] (2024-04-19)
+
+### Added
+
+- Add ObjectInspector
+- Add UnityTool
+- Add `LocalPlayerNullable` to `Player` utility
+
+### Changed
+
+- Update LethalConfig dependency to 1.4.1
+    - Make use of its optional assembly specification (thanks AinaVT! <3)
+- `activeByDefault` optional parameter in `ButtonToggle`
+
+### Trivial
+
+- Change website url on Thunderstore to https://github.com/FeralCompany
+
 ## Version [v0.0.7 -> v0.0.12] (2024-04-15)
 
 ### Changed

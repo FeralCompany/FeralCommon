@@ -27,4 +27,10 @@ public static class Player
     {
         return GameNetworkManager.Instance?.localPlayerController ?? throw new InvalidOperationException("Local player not ready!");
     }
+
+    [UsedImplicitly]
+    public static PlayerControllerB? LocalPlayerNullable()
+    {
+        return GameNetworkManager.Instance?.localPlayerController;
+    }
 }

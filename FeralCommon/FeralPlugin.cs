@@ -78,8 +78,7 @@ public abstract class FeralPlugin : BaseUnityPlugin
         {
             config.InitConfigEntry(Config);
 
-            // TODO: Relies on https://github.com/AinaVT/LethalConfig/pull/45 to be merged and released
-            LethalConfigManager.AddConfigItem(config.CreateConfigItem()); //, assembly);
+            LethalConfigManager.AddConfigItem(config.CreateConfigItem(), assembly);
         }
     }
 }

@@ -11,7 +11,8 @@
 
 ## Building the Project
 
-First, create a new file in the `FeralCommon` directory named `FeralCommon.csproj.user`. This is a file that is ignored by git and is automatically included in the project file. This file is used to store user-specific settings, such as the path to the game's installation directory.
+First, create a new file in the `FeralCommon` directory named `FeralCommon.csproj.user`. This is a file that is ignored by git and is automatically
+included in the project file. This file is used to store user-specific settings, such as the path to the game's installation directory.
 
 ### Example `FeralCommon.csproj.user`
 
@@ -33,7 +34,8 @@ First, create a new file in the `FeralCommon` directory named `FeralCommon.cspro
 ```
 
 This file provides the necessary functionality:
--  `GameBaseDir`: The path to the game's installation directory.
+
+- `GameBaseDir`: The path to the game's installation directory.
     - Required for local builds to pull game DLLs.
 - `ModProfileDir`: The path to the mod profile directory.
     - Required for local builds to pull dependencies

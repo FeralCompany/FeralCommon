@@ -4,9 +4,9 @@ using JetBrains.Annotations;
 namespace FeralCommon.Input;
 
 [UsedImplicitly]
-public class ButtonToggle(string id, string name, string path) : ButtonBindingBase<ButtonToggle>(id, name, path)
+public class ButtonToggle(string id, string name, string path, bool activeByDefault = false) : ButtonBindingBase<ButtonToggle>(id, name, path)
 {
-    [UsedImplicitly] public bool Active { get; private set; }
+    [UsedImplicitly] public bool Active { get; private set; } = activeByDefault;
 
     private Action<bool>? WhenToggled { get; set; }
 
