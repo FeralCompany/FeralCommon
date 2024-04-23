@@ -18,14 +18,14 @@ public class IntConfig(string section, string key) : RangeConfig<IntConfig, int>
 
     protected internal override BaseConfigItem CreateConfigItem()
     {
-        if (Slider)
+        if (Slider && IsRanged)
         {
             var options = new IntSliderOptions { Min = Min, Max = Max };
             return new IntSliderConfigItem(ValidatedEntry, FillBaseOptions(options));
         }
         else
         {
-            var options = new IntInputFieldOptions { Min = Min, Max = Max };
+            var options = IsRanged ? new IntInputFieldOptions { Min = Min, Max = Max } : new IntInputFieldOptions();
             return new IntInputFieldConfigItem(ValidatedEntry, FillBaseOptions(options));
         }
     }

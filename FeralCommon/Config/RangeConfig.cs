@@ -10,10 +10,12 @@ public abstract class RangeConfig<TDerived, TType>(string section, string key)
 {
     protected TType Min { get; private set; }
     protected TType Max { get; private set; }
+    protected bool IsRanged { get; private set; }
 
     [UsedImplicitly]
     public TDerived WithMin(TType min)
     {
+        IsRanged = true;
         Min = min;
         return (TDerived)this;
     }
@@ -21,12 +23,13 @@ public abstract class RangeConfig<TDerived, TType>(string section, string key)
     [UsedImplicitly]
     public TDerived WithMax(TType max)
     {
+        IsRanged = true;
         Max = max;
         return (TDerived)this;
     }
 
-    protected override AcceptableValueBase CreateAcceptableValue()
+    protected override AcceptableValueBase? CreateAcceptableValue()
     {
-        return new AcceptableValueRange<TType>(Min, Max);
+        return IsRanged ? new AcceptableValueRange<TType>(Min, Max) : null;
     }
 }

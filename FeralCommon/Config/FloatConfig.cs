@@ -26,14 +26,14 @@ public class FloatConfig(string section, string key) : RangeConfig<FloatConfig, 
 
     protected internal override BaseConfigItem CreateConfigItem()
     {
-        if (Slider)
+        if (Slider && IsRanged)
         {
             var options = new FloatStepSliderOptions { Min = Min, Max = Max, Step = Step };
             return new FloatSliderConfigItem(ValidatedEntry, FillBaseOptions(options));
         }
         else
         {
-            var options = new FloatInputFieldOptions { Min = Min, Max = Max };
+            var options = IsRanged ? new FloatInputFieldOptions { Min = Min, Max = Max } : new FloatInputFieldOptions();
             return new FloatInputFieldConfigItem(ValidatedEntry, FillBaseOptions(options));
         }
     }
