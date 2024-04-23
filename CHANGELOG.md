@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing, yet.
 
+## Version [v0.1.3] (2024-04-23)
+
+### Added
+
+- Added `HarmonyExtension`, namely `PatchNamespace` which scans the provided namespace and requests each type within to be patched.
+
 ## Version [v0.1.2] (2024-04-23)
 
 ### Changed
