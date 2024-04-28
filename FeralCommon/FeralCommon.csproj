@@ -29,7 +29,7 @@
         <None Include="../README.md;../CHANGELOG.md;../LICENSE" Pack="true" PackagePath="/"/>
     </ItemGroup>
     <ItemGroup>
-        <None Include="../assets/thunderstore.toml;../CONTRIBUTING.md" Pack="false"/>
+        <None Include="../assets/thunderstore.toml" Pack="false"/>
     </ItemGroup>
     <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
         <ItemGroup>

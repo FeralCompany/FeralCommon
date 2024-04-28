@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing, yet.
 
+## Version [v0.2.0] (2024-04-23)
+
+### Added
+
+- Add `GameItem` enum and `GameItems` utility class.
+    - Additionally, added `GameItemExtensions` for convenience methods against the enum.
+- Added `GameObjectExtensions`.
+- Added `GrabbableObjectExtensions`.
+- Added `NumberExtensions`.
+
+### Changed
+
+- `ObjectInspector` now expands all types by default, so detailedTypes is no longer necessary.
+
+### Fixed
+
+- `ObjectInspector` would get stuck on a few types. This has been fixed.
+
 ## Version [v0.1.3] (2024-04-23)
 
 ### Added

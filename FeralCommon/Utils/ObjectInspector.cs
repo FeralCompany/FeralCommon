@@ -9,7 +9,8 @@ namespace FeralCommon.Utils;
 public class ObjectInspector
 {
     private const BindingFlags DefaultBindingAttributes = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-    private readonly List<Type> _detailedTypes = [];
+
+    private readonly List<Type> _exceptionalTypes = [typeof(string)];
     private readonly List<Type> _ignoredTypes = [];
 
     private BindingFlags _bindingAttributes = DefaultBindingAttributes;
@@ -36,20 +37,6 @@ public class ObjectInspector
     }
 
     [UsedImplicitly]
-    public ObjectInspector AddDetailedTypes(params Type[] detailedTypes)
-    {
-        _detailedTypes.AddRange(detailedTypes);
-        return this;
-    }
-
-    [UsedImplicitly]
-    public ObjectInspector AddDetailedTypes(List<Type> detailedTypes)
-    {
-        _detailedTypes.AddRange(detailedTypes);
-        return this;
-    }
-
-    [UsedImplicitly]
     public void Inspect(object obj, out List<InspectedItem> items)
     {
         Inspect(obj, "", items = [], [obj], 0);
@@ -61,6 +48,7 @@ public class ObjectInspector
         Diff(a ?? throw new ArgumentNullException(nameof(a)), b, "", diffs = [], [], 0);
     }
 
+    [UsedImplicitly]
     public static void PrintInspection(List<InspectedItem> items, string title = "No Details")
     {
         Log.Info("-----------------------------------------------------------------------");
@@ -69,6 +57,7 @@ public class ObjectInspector
         Log.Info("-----------------------------------------------------------------------");
     }
 
+    [UsedImplicitly]
     public static void PrintDiff(List<DiffItem> items, string title = "No Details")
     {
         Log.Info("-----------------------------------------------------------------------");
@@ -106,12 +95,20 @@ public class ObjectInspector
             if (leftValue != null && leftValue.Equals(rightValue)) continue;
             var fieldPath = AppendPath(path, info.Name);
             diffs.Add(new DiffItem(fieldPath, leftValue, rightValue));
-            if (_detailedTypes.Contains(fieldType) && leftValue != null && depth <= 2)
-                Diff(leftValue, rightValue, fieldPath, diffs, visited, depth + 1);
+
+            if (leftValue == null || depth > 2) continue;
+
+            var leftType = leftValue.GetType();
+            if (leftType.IsValueType) continue;
+            if (_exceptionalTypes.Contains(leftType)) continue;
+
+            Diff(leftValue, rightValue, fieldPath, diffs, visited, depth + 1);
         }
 
         foreach (var info in objType.GetProperties(_bindingAttributes))
         {
+            if (info.GetIndexParameters().Length != 0) continue;
+
             var fieldType = info.PropertyType;
             if (fieldType.IsByRef) continue;
             if (_ignoredTypes.Contains(fieldType)) continue;
@@ -127,8 +124,14 @@ public class ObjectInspector
             if (aValue != null && aValue.Equals(bValue)) continue;
             var fieldPath = AppendPath(path, info.Name);
             diffs.Add(new DiffItem(fieldPath, aValue, bValue));
-            if (_detailedTypes.Contains(fieldType) && aValue != null && depth <= 2)
-                Diff(aValue, bValue, fieldPath, diffs, visited, depth + 1);
+
+            if (aValue == null || depth > 2) continue;
+
+            var aType = aValue.GetType();
+            if (aType.IsValueType) continue;
+            if (_exceptionalTypes.Contains(aType)) continue;
+
+            Diff(aValue, bValue, fieldPath, diffs, visited, depth + 1);
         }
     }
 
@@ -147,12 +150,18 @@ public class ObjectInspector
             visited.Add(fieldValue);
             var fieldPath = AppendPath(path, info.Name);
             items.Add(new InspectedItem(fieldPath, fieldType, fieldValue));
-            if (_detailedTypes.Contains(fieldType) && fieldValue != null && depth <= 2)
-                Inspect(fieldValue, fieldPath, items, visited, depth + 1);
+
+            if (fieldValue == null || depth > 2) continue;
+            if (fieldType.IsValueType) continue;
+            if (_exceptionalTypes.Contains(fieldType)) continue;
+
+            Inspect(fieldValue, fieldPath, items, visited, depth + 1);
         }
 
         foreach (var info in objType.GetProperties(_bindingAttributes))
         {
+            if (info.GetIndexParameters().Length != 0) continue;
+
             var fieldType = info.PropertyType;
             if (fieldType.IsByRef) return;
             if (_ignoredTypes.Contains(fieldType)) continue;
@@ -162,7 +171,12 @@ public class ObjectInspector
             visited.Add(fieldValue);
             var fieldPath = AppendPath(path, info.Name);
             items.Add(new InspectedItem(fieldPath, fieldType, fieldValue));
-            if (_detailedTypes.Contains(fieldType) && fieldValue != null && depth <= 2) Inspect(fieldValue, fieldPath, items, visited, depth + 1);
+
+            if (fieldValue == null || depth > 2) continue;
+            if (fieldType.IsValueType) continue;
+            if (_exceptionalTypes.Contains(fieldType)) continue;
+
+            Inspect(fieldValue, fieldPath, items, visited, depth + 1);
         }
     }
 
