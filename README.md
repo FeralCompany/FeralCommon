@@ -1,5 +1,13 @@
 # FeralCommon
 
+---
+
+# Deprecated
+
+## Please use [FeralCompany](https://thunderstore.io/c/lethal-company/p/Ferus/FeralCompany/) instead!
+
+---
+
 [![Build](https://img.shields.io/github/actions/workflow/status/FeralCompany/FeralCommon/build.yml?branch=main&style=for-the-badge&logo=github)](https://github.com/FeralCompany/FeralCommon/actions/workflows/build.yml)
 [![Latest Version](https://img.shields.io/thunderstore/v/FeralCompany/FeralCommon?style=for-the-badge&logo=thunderstore)](https://thunderstore.io/c/lethal-company/p/FeralCompany/FeralCommon)
 [![Total Downloads](https://img.shields.io/thunderstore/dt/FeralCompany/FeralCommon?style=for-the-badge&logo=thunderstore)](https://thunderstore.io/c/lethal-company/p/FeralCompany/FeralCommon)
